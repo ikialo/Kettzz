@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
@@ -243,7 +244,35 @@ public class MainActivity extends AppCompatActivity implements
                         .bearing(360).build();
 
                 mapboxMap.animateCamera(CameraUpdateFactory
-                        .newCameraPosition(position[0]), 3000);
+                        .newCameraPosition(position[0]), 3000, new MapboxMap.CancelableCallback() {
+                    @Override
+                    public void onCancel() {
+
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        position[0] = new CameraPosition.Builder()
+
+                                .zoom(20).build();
+
+                        mapboxMap.animateCamera(CameraUpdateFactory
+                                .newCameraPosition(position[0]), 2000, new MapboxMap.CancelableCallback() {
+                            @Override
+                            public void onCancel() {
+
+                            }
+
+                            @Override
+                            public void onFinish() {
+
+                                startActivity(new Intent(MainActivity.this, VideoActivity.class));
+
+                            }
+                        });
+
+                    }
+                });
             }
         });
 
